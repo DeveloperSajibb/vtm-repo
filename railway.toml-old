@@ -1,0 +1,82 @@
+# ============================================================================
+# Railway.app Configuration
+# ============================================================================
+# This file configures how Railway builds and deploys your application
+# ============================================================================
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "./Dockerfile.railway"
+
+[deploy]
+healthCheckPath = "/healthcheck.php"
+healthCheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+# Use PHP built-in server for Railway (listens on PORT env var)
+startCommand = "php -S 0.0.0.0:$PORT -t public"
+
+# Web service configuration
+[[services]]
+name = "web"
+source = "."
+
+[services.variables]
+# Railway automatically provides these:
+# - PORT (automatically set by Railway)
+# - RAILWAY_ENVIRONMENT
+# - RAILWAY_STATIC_URL (if using static files)
+# - DATABASE_URL (if PostgreSQL service is added)
+
+# Health check configuration
+[services.healthcheck]
+path = "/healthcheck.php"
+timeout = 300
+interval = 30
+
+# Port configuration
+[[services.ports]]
+port = 80
+http = true
+
+# ============================================================================
+# CRON JOB ALTERNATIVE: Scheduler Service
+# ============================================================================
+# Railway doesn't support traditional cron jobs, so we use a separate
+# service that runs continuously and executes tasks on schedule
+# ============================================================================
+
+[[services]]
+name = "scheduler"
+source = "."
+startCommand = "php cron/scheduler.php"
+
+[services.variables]
+# Same environment variables as web service
+# Railway will automatically share variables across services
+
+# ============================================================================
+# NOTES:
+# ============================================================================
+# 1. Add PostgreSQL service in Railway dashboard:
+#    - Go to your project
+#    - Click "New" -> "Database" -> "Add PostgreSQL"
+#    - Railway will automatically set DATABASE_URL
+#
+# 2. Environment Variables to set in Railway:
+#    - APP_ENV=production
+#    - APP_URL (will be set automatically by Railway)
+#    - ENCRYPTION_KEY (generate a new one for production)
+#    - DERIV_APP_ID
+#    - DERIV_WS_HOST
+#    - DB_TYPE=postgresql (to use PostgreSQL instead of MySQL)
+#
+# 3. For MySQL instead of PostgreSQL:
+#    - Add MySQL service in Railway dashboard
+#    - Set DB_TYPE=mysql
+#    - Set DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS manually
+#
+# 4. The scheduler service runs continuously and handles cron jobs
+#    internally using a loop with sleep intervals
+# ============================================================================
+

@@ -1,0 +1,20 @@
+{
+    "require": {
+        "php": "^8.2",
+        "ext-pdo": "*",
+        "ext-pdo_pgsql": "*",
+        "ext-pdo_mysql": "*",
+        "ext-mysqli": "*",
+        "ext-mbstring": "*",
+        "ext-gd": "*",
+        "ext-zip": "*",
+        "ext-curl": "*"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "chmod -R 755 .",
+            "mkdir -p storage",
+            "chmod -R 777 storage"
+        ]
+    }
+}

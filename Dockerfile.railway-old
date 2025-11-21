@@ -1,0 +1,55 @@
+# ============================================================================
+# Railway.app Dockerfile - Compatible with railway.toml startCommand
+# ============================================================================
+
+FROM php:8.2-cli
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libpq-dev \
+    libzip-dev \
+    postgresql-client \
+    zip \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install \
+    pdo_mysql \
+    mysqli \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    zip \
+    pdo_pgsql \
+    pgsql
+
+# Copy application files
+COPY . /var/www/html/
+
+# Create storage directory and set permissions
+RUN mkdir -p /var/www/html/storage \
+    && chmod -R 755 /var/www/html \
+    && chmod -R 777 /var/www/html/storage
+
+# Create public directory if it doesn't exist
+RUN mkdir -p /var/www/html/public
+
+# Expose port (Railway handles this automatically)
+EXPOSE 80
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:${PORT}/healthcheck.php || exit 1
+
+# No CMD here - railway.toml startCommand will be used

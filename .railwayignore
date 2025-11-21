@@ -1,0 +1,66 @@
+# Railway Ignore File
+# Files and directories to exclude from Railway builds
+
+# Development files
+.env
+.env.local
+.env.*.local
+*.log
+error_log
+debug_websocket.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (optional - keep if you want)
+# *.md
+# docs/
+
+# Test files
+tests/
+test/
+phpunit.xml
+.phpunit.result.cache
+
+# Build artifacts
+vendor/ (if using Composer, keep this)
+node_modules/ (if using npm)
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.backup
+
+# Database dumps
+*.sql.gz
+*.sql.zip
+database.zip
+
+# Local configuration
+config.local.php
+local/
+
+# Storage (keep structure, but ignore contents)
+storage/sessions/*
+!storage/sessions/.gitkeep
+
+# Cache
+cache/
+*.cache
+
