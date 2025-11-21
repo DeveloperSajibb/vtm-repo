@@ -3,14 +3,14 @@ builder = "NIXPACKS"
 
 [phases.setup]
 nixPkgs = [
-  "php81",
-  "php81Extensions.mysqli",
-  "php81Extensions.pdo",
-  "php81Extensions.pdo_mysql",
-  "php81Extensions.mbstring",
-  "php81Extensions.curl",
+  "php",
+  "phpExtensions.pdo",
+  "phpExtensions.pdo_mysql",
+  "phpExtensions.mysqli",
+  "phpExtensions.mbstring",
+  "phpExtensions.curl",
   "composer"
 ]
 
 [deploy]
-start = "php -S 0.0.0.0:3000 -t . router.php"
+start = "php -S 0.0.0.0:${PORT} -t public router.php"
