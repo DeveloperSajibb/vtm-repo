@@ -5,21 +5,21 @@
  * Converted from React DashboardPage.tsx
  */
 
-// Start session (already in your file)
+@error_reporting(0);
+@ini_set('display_errors', '0');
+
+require_once __DIR__ . '/../app/autoload.php';
+
+// Start session
 if (session_status() === PHP_SESSION_NONE) {
     @session_start();
 }
 
-// If not logged in, redirect to login page
-if (!isset($_SESSION['user'])) {
-    // For API requests you might keep JSON responses, but for web preview redirect to login:
-    header('Location: /login.php');
-    exit;
-}
+// Require authentication
+$user = App\Middleware\AuthMiddleware::requireAuth();
 
-// Now set $user from session
-$user = $_SESSION['user'];
-
+$pageTitle = 'Dashboard - VTM Option';
+include __DIR__ . '/../views/includes/header.php';
 ?>
 
 <div class="container-fluid py-4">
